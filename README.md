@@ -18,9 +18,10 @@ This project is a web application that fetches the latest news about a given com
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/news-summarizer-tts.git
-   cd news-summarizer-tts
+   git clone https://github.com/uthsavi97/news-summarizer-TTS.git
+   cd news-summarizer-TTS
    ```
+   
 2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
@@ -71,12 +72,7 @@ The frontend will be available at: [http://localhost:8501](http://localhost:8501
 2. Set the Space SDK to **Streamlit**.
 3. Push your code to the Space:
    ```bash
-   git remote add origin https://huggingface.co/spaces/yourusername/news-summarizer-tts
+   git remote add origin https://huggingface.co/spaces/Uthsavi/news-summarizer-tts
    git push origin main
    ```
 4. Your app will be deployed automatically.
-
-## License
-This project is licensed under the MIT License.
-
----

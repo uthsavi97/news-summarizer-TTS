@@ -1,0 +1,12 @@
+requests
+beautifulsoup4
+transformers
+torch
+pandas
+numpy
+gTTS
+streamlit
+fastapi
+uvicorn
+TextBlob
+matplotlib

@@ -91,5 +91,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Feel free to modify and improve this project. Contributions are welcome!
 

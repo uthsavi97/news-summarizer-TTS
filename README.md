@@ -34,8 +34,6 @@ This project is a web application that fetches the latest news about a given com
     # Activate the virtual environment:
     # For Windows:
     venv\Scripts\activate
-    # For macOS/Linux:
-    source venv/bin/activate
     ```
 3. Install dependencies:
     ```bash

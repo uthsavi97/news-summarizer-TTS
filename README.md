@@ -89,4 +89,5 @@ This project is licensed under the MIT License.
 
 ---
 
+INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 

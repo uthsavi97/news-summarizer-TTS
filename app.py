@@ -2,57 +2,47 @@ import streamlit as st
 import requests
 import os
 
-# App title and description
-st.title("News Summarizer and TTS")
-st.write("Enter a company name to fetch recent news, analyze sentiment, and generate Hindi audio summaries.")
+# Backend URL
 
-# Input for the company name
-company_name = st.text_input("Enter Company Name:")
+API_URL = "http://127.0.0.1:8001"
 
-# Fetch data when company name is entered
-if company_name:
-    with st.spinner("Fetching news..."):
-        response = requests.get(f"http://127.0.0.1:8000/news/{company_name}")
-        if response.status_code == 200:
-            st.session_state.news_data = response.json()
+st.title("News Summarization and Sentiment Analysis")
+st.write("Enter a company name to get recent news articles, analyze sentiments, and listen to the summary in Hindi.")
+
+# Input Section
+company = st.text_input("Enter Company Name:", "Tesla")
+
+if st.button("Analyze News"):
+    with st.spinner("Fetching articles..."):
+        response = requests.get(f"{API_URL}/extract_articles/?company_name={company}")
+        if response.status_code != 200:
+            st.error("Failed to fetch articles")
         else:
-            st.error("Failed to fetch news. Please try again.")
+            articles = response.json()
+            st.success("Articles Fetched!")
 
-# Check if data is fetched
-if 'news_data' in st.session_state:
-    data = st.session_state.news_data
+            # Display Articles
+            for article in articles:
+                st.subheader(article['title'])
+                st.write(article['content'][:500] + "...")  # Show a preview
+                st.write(f"[Read More]({article['url']})")
 
-    if 'Articles' in data:
-        st.subheader("News Articles")
-        for idx, article in enumerate(data['Articles']):
-            st.write(f"**{idx + 1}. {article['Title']}**")
-            st.write(f"Summary: {article['Summary']}")
-            st.write(f"Sentiment: {article['Sentiment']}")
-            st.write(f"Topics: {', '.join(article['Topics'])}")
-            st.write("---")
+            # Sentiment Analysis
+            with st.spinner("Analyzing sentiments..."):
+                analysis_response = requests.post(f"{API_URL}/analyze_sentiment/", json={"articles": articles})
+                if analysis_response.status_code != 200:
+                    st.error("Failed to analyze sentiments")
+                else:
+                    analysis = analysis_response.json()
+                    st.success("Sentiments Analyzed!")
 
-        # Comparative Analysis
-        st.subheader("Comparative Sentiment Analysis")
-        sentiment_dist = data['Comparative Sentiment Score']['Sentiment Distribution']
-        st.write(f"Positive: {sentiment_dist['Positive']} | Negative: {sentiment_dist['Negative']} | Neutral: {sentiment_dist['Neutral']}")
+                    st.write("### Comparative Sentiment Analysis")
+                    st.write(analysis["sentiment_counts"])
+                    st.write("### Hindi Audio Summary")
+                    audio_path = analysis.get("hindi_tts_path")
+                    if audio_path and os.path.exists(audio_path):
+                        st.audio(audio_path)
+                    else:
+                        st.warning("No audio generated.")
 
-        for comp in data['Comparative Sentiment Score']['Coverage Differences']:
-            st.write(f"- {comp['Comparison']}")
-            st.write(f"Impact: {comp['Impact']}")
-
-        # Final Sentiment Analysis
-        st.subheader("Final Sentiment Analysis")
-        st.write(data['Final Sentiment Analysis'])
-
-        # Audio Generation
-        st.subheader("Hindi Text-to-Speech")
-        audio_response = requests.get(f"http://127.0.0.1:8000/tts/{company_name}")
-        if audio_response.status_code == 200:
-            audio_path = "tts_output.mp3"
-            with open(audio_path, "wb") as f:
-                f.write(audio_response.content)
-            st.audio(audio_path)
-        else:
-            st.error("Failed to generate Hindi audio. Please try again.")
-    else:
-        st.error("No articles found. Please check the company name.")
+st.write("Developed by Uthsavi YP")

@@ -50,8 +50,7 @@ This project is a web application that fetches the latest news about a given com
 ## Running the Application
 1. Start the FastAPI backend:
     ```bash
-    uvicorn api:app --reload
-    ```
+python -m uvicorn api:app --reload    ```
 2. Start the Streamlit frontend:
     ```bash
     streamlit run app.py

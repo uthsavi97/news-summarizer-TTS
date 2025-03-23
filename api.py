@@ -15,6 +15,7 @@ class AnalysisResponse(BaseModel):
     company: str
     articles: list
     comparative_sentiment: dict
+    topics: list
     audio_path: str
 
 # Root endpoint
@@ -36,11 +37,11 @@ def get_articles(request: CompanyRequest):
 def analyze_articles(request: CompanyRequest):
     try:
         articles = extract_articles(request.company_name, request.num_articles)
-        sentiment_counts = comparative_analysis(articles)
+        sentiment_counts, topics = comparative_analysis(articles)
         audio_path = generate_hindi_tts(f"{request.company_name} ke news ka vishleshan safalta purvak pura hua.")
-        return AnalysisResponse(company=request.company_name, articles=articles, comparative_sentiment=sentiment_counts, audio_path=audio_path)
+        return AnalysisResponse(company=request.company_name, articles=articles, comparative_sentiment=sentiment_counts, topics=topics, audio_path=audio_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run("api:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)

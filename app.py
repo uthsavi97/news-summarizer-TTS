@@ -3,8 +3,7 @@ import requests
 import os
 
 # Backend URL
-
-API_URL = "http://127.0.0.1:8001"
+API_URL = "http://127.0.0.1:8000"
 
 st.title("News Summarization and Sentiment Analysis")
 st.write("Enter a company name to get recent news articles, analyze sentiments, and listen to the summary in Hindi.")
@@ -38,8 +37,10 @@ if st.button("Analyze News"):
 
                     st.write("### Comparative Sentiment Analysis")
                     st.write(analysis["sentiment_counts"])
+                    st.write("### Topics")
+                    st.write(analysis["topics"])
                     st.write("### Hindi Audio Summary")
-                    audio_path = analysis.get("hindi_tts_path")
+                    audio_path = analysis.get("audio_path")
                     if audio_path and os.path.exists(audio_path):
                         st.audio(audio_path)
                     else:
